@@ -1,37 +1,29 @@
 # 2. Add Two Numbers
 
-Language Python3
+class ListNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.next = None
 
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
 
-class Solution:
+class Solution(object):
+
+
     def addTwoNumbers(self, l1, l2):
-        dummy = ListNode()
-        current = dummy
         carry = 0
-        
-        while l1 or l2 or carry:
-            total = carry
+     
+        head = curr = ListNode(0)
+        while l1 or l2:
+            val = carry
             if l1:
-                total += l1.val
+                val += l1.val
                 l1 = l1.next
             if l2:
-                total += l2.val
+                val += l2.val
                 l2 = l2.next
-            
-            carry = total // 10
-            current.next = ListNode(total % 10)
-            current = current.next
-        
-        return dummy.next
-
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-
+            curr.next = ListNode(val % 10)
+            curr = curr.next
+            carry = int(val / 10)
+        if carry > 0:
+            curr.next = ListNode(carry)
+        return head.next
