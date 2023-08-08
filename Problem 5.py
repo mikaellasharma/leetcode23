@@ -1,28 +1,41 @@
 # 5. Longest Palindromic Substring
 
-class Solution:
-    def longestPalindrome(self, s: str) -> str:
-        def expand_around_center(left, right):
-            while left >= 0 and right < len(s) and s[left] == s[right]:
-                left -= 1
-                right += 1
-            return s[left + 1:right]  
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        ls = len(s)
+        if ls <= 1 or len(set(s)) == 1:
+            return s
+        
+        temp_s = '#'.join('{}'.format(s))
+     
+        tls = len(temp_s)
+        seed = range(1, tls - 1)
+       
+        len_table = [0] * tls
+        for step in range(1, tls / 2 + 1):
+            final = []
+            for pos in seed:
+                if pos - step < 0 or pos + step >= tls:
+                    continue
+                if temp_s[pos - step] != temp_s[pos + step]:
+                    continue
+                final.append(pos)
+                if temp_s[pos - step] == '#':
+                    continue
+                len_table[pos] = step
+            seed = final
+        max_pos, max_step = 0, 0
+        for i, s in enumerate(len_table):
+            if s >= max_step:
+                max_step = s
+                max_pos = i
+        return temp_s[max_pos - max_step:max_pos + max_step + 1].translate(None, '#')
 
-        longest_palindrome = ""
-
-        for i in range(len(s)):
-            palindrome1 = expand_around_center(i, i) 
-            palindrome2 = expand_around_center(i, i + 1)  
-
-           
-            palindrome = palindrome1 if len(palindrome1) > len(palindrome2) else palindrome2
-
-            if len(palindrome) > len(longest_palindrome):
-                longest_palindrome = palindrome
-
-        return longest_palindrome
-
-
-
-
+if __name__ == '__main__':
+    s = Solution()
+    print(s.longestPalindrome("abcbe"))
 
